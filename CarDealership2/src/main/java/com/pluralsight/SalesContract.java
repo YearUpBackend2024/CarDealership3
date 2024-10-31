@@ -9,7 +9,8 @@ public class SalesContract extends Contract {
     private double monthlyPayment;
 
 
-    public SalesContract(String dateOfContract, String customerName, String customerEmail, String vehicleSold, double totalPrice, double monthlyPayment) {
+    public SalesContract(String dateOfContract, String customerName, String customerEmail,
+                         String vehicleSold, double totalPrice, double monthlyPayment) {
         super(dateOfContract, customerName, customerEmail, vehicleSold, totalPrice, monthlyPayment);
         this.salesTaxAmount = salesTaxAmount;
         this.recordingFee = recordingFee;
@@ -68,6 +69,13 @@ public class SalesContract extends Contract {
 
     @Override
     public double getMonthlyPayment() {
+        if (wantToFinance){
+            salesTaxAmount = 0.05;
+            recordingFee = 100;
+            processingFee1 = 295;
+            processingFee2 = 495;
+
+        }
         return 0;
     }
 }
