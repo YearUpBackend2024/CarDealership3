@@ -19,6 +19,14 @@ public class SalesContract extends Contract {
         this.wantToFinance = wantToFinance;
     }
 
+    public SalesContract(String dateOfContract, String customerName, String customerEmail, Vehicle vehicleSold, double salesTaxAmount, double recordingFee, double processingFee, boolean wantToFinance) {
+        super(dateOfContract, customerName, customerEmail, vehicleSold);
+        this.salesTaxAmount = salesTaxAmount;
+        this.recordingFee = recordingFee;
+        this.processingFee = processingFee;
+        this.wantToFinance = wantToFinance;
+    }
+
     public double getSalesTaxAmount() {
         return salesTaxAmount;
     }
@@ -69,6 +77,6 @@ public class SalesContract extends Contract {
     }
 
     private double calculateLoanPayment(double borrowedAmount, double loanRate, double months){
-        return borrowedAmount = (loanRate/12 * Math.pow(1 * loanRate/12, months)) / (Math.pow(1 + loanRate/12, months));
+        return borrowedAmount * (loanRate/12 * Math.pow(1 + loanRate/12, months)) / (Math.pow(1 + loanRate/12, months));
     }
 }
