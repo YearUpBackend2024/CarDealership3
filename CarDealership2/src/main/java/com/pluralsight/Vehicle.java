@@ -1,6 +1,6 @@
 package com.pluralsight;
 
-public class Vehicle {
+public class Vehicle implements ITextEncodable {
     private int vin;
     private int year;
     private String make;
@@ -71,6 +71,19 @@ public class Vehicle {
             colorString = color;
         }
         return (this.getYear() + " " + this.getMake() + " " + this.getModel() + " [" + colorString + "]");
+    }
+
+    @Override
+    public String encode() {
+        return new StringBuilder()
+                .append(this.getVin()).append("|")
+                .append(this.getYear()).append("|")
+                .append(this.getMake()).append("|")
+                .append(this.getModel()).append("|")
+                .append(this.getVehicleType()).append("|")
+                .append(this.getColor()).append("|")
+                .append(this.getOdometer()).append("|")
+                .append(this.getPrice()).toString();
     }
 
 }

@@ -21,6 +21,31 @@ public class LeaseContract extends Contract {
         LeaseFee = leaseFee;
     }
 
+    public static Contract buildFromEncodedData(String encodedData){
+        //super("asdf","asdf","asdf", null);
+        String[] cols = encodedData.split("\\|");
+
+        String contractDate = cols[1];
+        String contractName = cols[2];
+        String contractEmail = cols[3];
+        int vehicleVin = Integer.parseInt(cols[4]);
+        int vehicleYear = Integer.parseInt(cols[5]);
+        String vehicleMake = cols[6];
+        String vehicleModel = cols[7];
+        String vehicleType = cols[8];
+        String vehicleColor = cols[9];
+        int vehicleMiles = Integer.parseInt(cols[10]);
+        double vehiclePrice = Double.parseDouble(cols[11]);
+        double leaseContractExpectedEndingValue = Double.parseDouble(cols[12]);
+        double leaseContractLeaseFee = Double.parseDouble(cols[13]);
+
+        Vehicle v = new Vehicle(vehicleVin, vehicleYear, vehicleMake, vehicleModel, vehicleType, vehicleColor, vehicleMiles, vehiclePrice);
+
+        return new LeaseContract(contractDate,contractName, contractEmail, v, leaseContractExpectedEndingValue, leaseContractLeaseFee );
+
+    }
+
+
     public double getExpectedEndingValue() {
         return expectedEndingValue;
     }
@@ -49,4 +74,23 @@ public class LeaseContract extends Contract {
 
         return BankingCalculations.calculateLoanPayment(this.getTotalPrice(), financeRate, financeTerm);
     }
+
+    @Override
+    public String encode() {
+        return "LEASE|" +
+                this.getDateOfContract() + "|" +
+                this.getCustomerName() + "|" +
+                this.getCustomerEmail() + "|" +
+                this.getVehicleSold().encode() + "|" +
+                this.getExpectedEndingValue() + "|" +
+                this.getLeaseFee() + "|" +
+                this.getTotalPrice() + "|" +
+                this.getMonthlyPayment();
+    }
+
+
+
+
+
+
 }

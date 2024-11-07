@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ContractFileManager {
 
-    public static void getFromCSV(String filename){
+    public static ArrayList<Contract> getFromCSV(String filename){
 
         ArrayList<Contract> results = new ArrayList<>();
 
@@ -38,6 +38,7 @@ public class ContractFileManager {
                                 Boolean.parseBoolean(newLine[12])
                         );
                         results.add(contract);
+
                     } else if (newLine[0].equalsIgnoreCase("LEASE")) {
                         LeaseContract contract = new LeaseContract(
                                 newLine[1], // date
@@ -55,26 +56,44 @@ public class ContractFileManager {
                                 )
                         );
                         results.add(contract);
-                    } else {
-                        //invalid contract type, how to handle?
-                        System.out.println("Invalid contract type, please try again or enter Q to return");
-                        String input = null;
-                        if (input.equalsIgnoreCase("q"))
-                            return;
-
                     }
+
                 }
             }
             bufferedReader.close();
 
-        }catch(Exception e){
+            return results;
+
+        } catch(Exception e){
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void saveToCSV(ArrayList<Contract> contracts, String filename){
+        try {
+            //Creating a file writer and assigning the file writer to the buffered writer.
+            FileWriter fw = new FileWriter(filename, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            for (Contract contract : contracts){
+                bw.write(getEncodedContracts(contract));
+            }
+            bw.close(); // Close the BufferedWriter
+
+        } catch (IOException e) {
         }
 
     }
 
-    public static void saveToCSV(ArrayList<Contract> contracts, String filename){
-
+    private static String getEncodedContracts(Contract contract){
+        return new StringBuilder()
+                .append(contract.getDateOfContract()).append("|")
+                .append(contract.getCustomerName()).append("|")
+                .append(contract.getCustomerEmail()).append("|")
+                .append(contract.getVehicleSold()).append("|")
+                .append(contract.getTotalPrice()).append("|")
+                .append(contract.getMonthlyPayment()).append("\n").toString();
     }
 
 

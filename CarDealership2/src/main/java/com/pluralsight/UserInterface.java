@@ -1,6 +1,7 @@
 package com.pluralsight;
 
 import com.pluralsight.contracts.Contract;
+import com.pluralsight.contracts.ContractFileManager;
 import com.pluralsight.contracts.LeaseContract;
 import com.pluralsight.contracts.SalesContract;
 
@@ -8,12 +9,15 @@ import java.util.ArrayList;
 
 public class UserInterface {
 
-    public static final String filename = "inventory.csv";
+    public static final String filename_dealership = "inventory.csv";
+    public static String filename_contracts = "Contracts.csv";
     public Dealership currentDealership;
+    public ArrayList<Contract> contracts;
 
 
     public UserInterface(){
-        currentDealership = DealershipFileManager.getFromCSV(filename);
+        currentDealership = DealershipFileManager.getFromCSV(filename_dealership);
+        contracts = ContractFileManager.getFromCSV(filename_contracts);
     }
 
 
@@ -31,6 +35,7 @@ public class UserInterface {
                 8 - Add a vehicle
                 9 - Remove a vehicle
                 10 - Sell or Lease vehicle
+                11 - Display Contracts
                 99 - Quit
                 >>>\s""";
 
@@ -51,6 +56,7 @@ public class UserInterface {
                 case 8 -> processAddVehicleRequest();
                 case 9 -> processRemoveVehicleRequest();
                 case 10 -> processSellOrLeaseRequest();
+                case 11 -> processDisplayContractsRequest();
                 case 99 -> System.exit(0);
                 default -> System.out.println("Invalid selection. Please try again.");
             }
@@ -69,7 +75,7 @@ public class UserInterface {
             }
         }
 
-        DealershipFileManager.saveToCSV(currentDealership,filename);
+        DealershipFileManager.saveToCSV(currentDealership,filename_dealership);
     }
 
     private void processAddVehicleRequest() {
@@ -86,7 +92,7 @@ public class UserInterface {
         Vehicle v = new Vehicle(vin,year, make, model, vehicleType, color, odometer, price);
 
         currentDealership.addVehicleToInventory(v);
-        DealershipFileManager.saveToCSV(currentDealership, filename);
+        DealershipFileManager.saveToCSV(currentDealership, filename_dealership);
 
     }
 
@@ -140,7 +146,6 @@ public class UserInterface {
     public void processGetAllVehiclesRequest(){
         displayVehicles(currentDealership.getAllVehicles());
     }
-
 
     public void processSellOrLeaseRequest(){
         int vin = 0;
@@ -241,23 +246,27 @@ public class UserInterface {
 
             contract = new SalesContract(date, customerName, customerEmail, vehicle, isFinanced);
         } else {
-            // do later.
             contract = new LeaseContract(date,customerName,customerEmail,vehicle);
         }
 
-        System.out.println(contract);
-        System.out.println(contract.getTotalPrice());
-        System.out.println(contract.getMonthlyPayment());
+        contracts.add(contract);
 
     }
 
-
+    public void processDisplayContractsRequest(){
+        displayContracts(contracts);
+    }
 
     public void displayVehicles(ArrayList<Vehicle> vehicles){
         for(Vehicle vehicle : vehicles){
             System.out.println(vehicle.toString());
         }
+    }
 
+    public void displayContracts(ArrayList<Contract> contracts) {
+        for (Contract c : contracts) {
+            System.out.println(c);
+        }
     }
 
 }

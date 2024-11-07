@@ -1,8 +1,9 @@
 package com.pluralsight.contracts;
 
+import com.pluralsight.ITextEncodable;
 import com.pluralsight.Vehicle;
 
-public class SalesContract extends Contract {
+public class SalesContract extends Contract implements ITextEncodable {
     private double salesTaxAmount;
     private final double salesTaxPercentage = 0.05;
     private double recordingFee;
@@ -79,4 +80,22 @@ public class SalesContract extends Contract {
     private double calculateLoanPayment(double borrowedAmount, double loanRate, double months){
         return borrowedAmount * (loanRate/12 * Math.pow(1 + loanRate/12, months)) / (Math.pow(1 + loanRate/12, months));
     }
+
+    @Override
+    public String encode() {
+        return "SALE|" +
+                this.getDateOfContract() + "|" +
+                this.getCustomerName() + "|" +
+                this.getCustomerEmail() + "|" +
+                this.getVehicleSold().encode() + "|" +
+                this.getSalesTaxAmount() + "|" +
+                this.getRecordingFee() + "|" +
+                this.getProcessingFee() + "|" +
+                this.getTotalPrice() + "|" +
+                (this.isWantToFinance() ? "YES" : "NO") + "|" +
+                this.getMonthlyPayment();
+
+    }
+
+
 }
